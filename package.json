@@ -6,7 +6,7 @@
   "scripts": {
     "build": "go build",
     "predev": "npm run build",
-    "dev": "./hello $(cat .env)",
+    "dev": "./gosdk $(cat .env)",
     "dev:watch": "nodemon -e go --watch ./ --exec npm run dev"
   },
   "author": "",

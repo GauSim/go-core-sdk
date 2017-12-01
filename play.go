@@ -1,14 +1,11 @@
-// Go contains rich function for grab web contents. _net/http_ is the major
-// library.
-// Ref: [golang.org](http://golang.org/pkg/net/http/#pkg-examples).
 package main
 
 import (
 	"flag"
 	"fmt"
 
-	"github.com/gausim/hello/core"
-	"github.com/gausim/hello/dto"
+	"github.com/gausim/gosdk/core"
+	"github.com/gausim/gosdk/dto"
 )
 
 var account string

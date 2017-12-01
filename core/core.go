@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/gausim/hello/dto"
+	"github.com/gausim/gosdk/dto"
 )
 
 type ClientConfig struct {
