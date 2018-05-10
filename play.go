@@ -19,9 +19,22 @@ func main() {
 	flag.StringVar(&account, "account", "", "account")
 	flag.StringVar(&username, "username", "", "username")
 	flag.StringVar(&password, "password", "", "password")
+
 	flag.StringVar(&secret, "secret", "", "secret")
 	flag.StringVar(&identifier, "identifier", "", "identifier")
+
 	flag.Parse()
+
+	if len(account) == 0 {
+		panic("missing flag '-account <account>'")
+	}
+
+	if len(username) == 0 {
+		panic("missing flag '-username <username>'")
+	}
+	if len(password) == 0 {
+		panic("missing flag '-password <password>'")
+	}
 
 	client := core.ClientConfig{
 		Identifier:    identifier,
