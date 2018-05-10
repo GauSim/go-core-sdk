@@ -12,6 +12,19 @@ import (
 	"github.com/gausim/gosdk/dto"
 )
 
+type CoreError struct {
+	message string
+}
+
+func NewCoreError(message string) *CoreError {
+	return &CoreError{
+		message: message,
+	}
+}
+func (e *CoreError) Error() string {
+	return e.message
+}
+
 type ClientConfig struct {
 	Identifier    string
 	Version       string
@@ -88,6 +101,11 @@ func (r *ClientConfig) GetAuth(account, username, password string) (Auth, error)
 	}
 
 	json.Unmarshal(data, &auth)
+
+	if len(auth.AccessToken) == 0 {
+		return auth, NewCoreError("authentication failed [" + fmt.Sprintf("%s", data) + "]")
+	}
+
 	return auth, nil
 }
 
@@ -101,9 +119,9 @@ func (r *ClientConfig) GetCredentials(account, username, password string) (Crede
 	if err != nil {
 		return Credentials{}, err
 	}
-	d := Credentials{Auth: auth, SelectedCompany: companies[0]}
+	creds := Credentials{Auth: auth, SelectedCompany: companies[0]}
 
-	return d, nil
+	return creds, nil
 }
 
 // GetCompanies todo
@@ -123,6 +141,10 @@ func (r ClientConfig) GetCompanies(auth Auth) ([]Company, error) {
 	cr := ClientRequest{method: "GET", url: url, auth: auth}
 	result := Companies{}
 	err := r.Request(cr, &result)
+
+	if len(result.Companies) == 0 {
+		return nil, NewCoreError("No Companies found")
+	}
 
 	return result.Companies, err
 }

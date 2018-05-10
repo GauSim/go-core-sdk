@@ -11,19 +11,10 @@ import (
 var account string
 var password string
 var username string
-var secret string
-var identifier string
+var clientSecret string
+var clientIdentifier string
 
-func main() {
-
-	flag.StringVar(&account, "account", "", "account")
-	flag.StringVar(&username, "username", "", "username")
-	flag.StringVar(&password, "password", "", "password")
-
-	flag.StringVar(&secret, "secret", "", "secret")
-	flag.StringVar(&identifier, "identifier", "", "identifier")
-
-	flag.Parse()
+func validateFlags() {
 
 	if len(account) == 0 {
 		panic("missing flag '-account <account>'")
@@ -32,14 +23,33 @@ func main() {
 	if len(username) == 0 {
 		panic("missing flag '-username <username>'")
 	}
-	if len(password) == 0 {
-		panic("missing flag '-password <password>'")
+
+	if len(clientSecret) == 0 {
+		panic("missing flag '-clientSecret <clientSecret>'")
 	}
 
+	if len(clientIdentifier) == 0 {
+		panic("missing flag '-clientIdentifier <clientIdentifier>'")
+	}
+}
+
+func main() {
+
+	flag.StringVar(&account, "account", "", "account")
+	flag.StringVar(&username, "username", "", "username")
+	flag.StringVar(&password, "password", "", "password")
+
+	flag.StringVar(&clientSecret, "clientSecret", "", "clientSecret")
+	flag.StringVar(&clientIdentifier, "clientIdentifier", "", "clientIdentifier")
+
+	flag.Parse()
+
+	validateFlags()
+
 	client := core.ClientConfig{
-		Identifier:    identifier,
+		Identifier:    clientIdentifier,
 		Version:       "0.0.1-beta",
-		Secret:        secret,
+		Secret:        clientSecret,
 		OAuthEndpoint: "https://et.dev.coresuite.com/api/oauth2/v1",
 		Debug:         true}
 

@@ -28,7 +28,7 @@ func generateJSONRequestData(cr ClientRequest) ([]byte, string, error) {
 
 func (r ClientConfig) Request(cr ClientRequest, re interface{}) error {
 	if r.Debug {
-		log.Printf("http request: %s %v\n", cr.method, cr.url)
+		log.Printf("[http] request: %s %v \n\n", cr.method, cr.url)
 	}
 
 	body, ct, err := generateJSONRequestData(cr)
@@ -37,13 +37,13 @@ func (r ClientConfig) Request(cr ClientRequest, re interface{}) error {
 	}
 
 	if r.Debug {
-		fmt.Printf("req.body \n\n %s \n\n", string(body))
+		log.Printf("[http] body \n\n %s \n\n", string(body))
 	}
 
 	client := &http.Client{}
 	req, err := http.NewRequest(cr.method, cr.url, bytes.NewReader(body))
 	if err != nil {
-		log.Fatalf("http.NewRequest() error: %v\n", err)
+		log.Fatalf("[http] http.NewRequest() error: %v\n", err)
 	}
 	req.Header.Add("Content-Type", ct)
 
@@ -56,25 +56,25 @@ func (r ClientConfig) Request(cr ClientRequest, re interface{}) error {
 
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("httpGet() error: %v\n", err)
+		log.Fatalf("[http] httpGet() error: %v\n", err)
 		return err
 	}
 
 	defer resp.Body.Close()
 	c, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Fatalf("ioutil.ReadAll() error: %v\n", err)
+		log.Fatalf("[http] ioutil.ReadAll() error: %v\n", err)
 		return err
 	}
 
 	if r.Debug {
-		fmt.Printf("http request resp: \n\n %s \n\n", string(c))
+		log.Printf("[http] request resp: \n\n %s \n\n", string(c))
 	}
 
 	var env envelope
 	err2 := json.Unmarshal(c, &env)
 	if err2 != nil {
-		log.Fatalf("envelope error: %v\n", err2)
+		log.Fatalf("[http] envelope error: %v\n", err2)
 		return err2
 	}
 
